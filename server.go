@@ -10,12 +10,12 @@ import (
 
 func main() {
 	e := echo.New()
-	client := microgen.NewClient("033506d6-9742-4298-855a-fb19974b6c75", microgen.DefaultURL())
+	client := microgen.NewClient("1dbc2a74-60c6-4f64-92bc-b311a26164df", microgen.DefaultURL())
 
-	songsRoutes := e.Group("/songs")
+	productsRoutes := e.Group("/products")
 
-	songsRoutes.GET("", func(c echo.Context) error {
-		resp, err := client.Service("songs").Find()
+	productsRoutes.GET("", func(c echo.Context) error {
+		resp, err := client.Service("products").Find()
 		if err != nil {
 			return c.JSON(http.StatusNonAuthoritativeInfo, err)
 		}
@@ -23,14 +23,14 @@ func main() {
 		return c.JSON(http.StatusOK, resp.Data)
 	})
 
-	songsRoutes.POST("", func(c echo.Context) error {
+	productsRoutes.POST("", func(c echo.Context) error {
 		body := make(map[string]interface{})
 		err := json.NewDecoder(c.Request().Body).Decode(&body)
 		if err != nil {
 			return c.String(http.StatusBadRequest, "failed parse request body to json")
 		}
 
-		resp, errr := client.Service("songs").Create(body)
+		resp, errr := client.Service("products").Create(body)
 		if errr != nil {
 			return c.JSON(http.StatusNonAuthoritativeInfo, err)
 		}
@@ -38,7 +38,7 @@ func main() {
 		return c.JSON(http.StatusOK, resp.Data)
 	})
 
-	songsRoutes.PATCH("/:id", func(c echo.Context) error {
+	productsRoutes.PATCH("/:id", func(c echo.Context) error {
 		id := c.Param("id")
 		body := make(map[string]interface{})
 
@@ -47,7 +47,7 @@ func main() {
 			return c.String(http.StatusBadRequest, "failed parse request body to json")
 		}
 
-		resp, errr := client.Service("songs").UpdateByID(id, body)
+		resp, errr := client.Service("products").UpdateByID(id, body)
 		if errr != nil {
 			return c.JSON(http.StatusNonAuthoritativeInfo, err)
 		}
@@ -55,9 +55,9 @@ func main() {
 		return c.JSON(http.StatusOK, resp.Data)
 	})
 
-	songsRoutes.DELETE("/:id", func(c echo.Context) error {
+	productsRoutes.DELETE("/:id", func(c echo.Context) error {
 		id := c.Param("id")
-		resp, err := client.Service("songs").DeleteByID(id)
+		resp, err := client.Service("products").DeleteByID(id)
 		if err != nil {
 			return c.JSON(http.StatusNonAuthoritativeInfo, err)
 		}
@@ -65,9 +65,9 @@ func main() {
 		return c.JSON(http.StatusOK, resp.Data)
 	})
 
-	songsRoutes.GET("/:id", func(c echo.Context) error {
+	productsRoutes.GET("/:id", func(c echo.Context) error {
 		id := c.Param("id")
-		res, err := client.Service("songs").GetByID(id)
+		res, err := client.Service("products").GetByID(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
